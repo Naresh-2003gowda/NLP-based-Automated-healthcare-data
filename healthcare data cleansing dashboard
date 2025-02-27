@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Healthcare Data Cleansing Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    .quality-indicator {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      font-weight: bold;
+      font-size: 24px;
+      color: white;
+    }
+    .high-quality { background-color: #28a745; }
+    .medium-quality { background-color: #ffc107; }
+    .low-quality { background-color: #dc3545; }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <h1 class="text-center">Healthcare Data Cleansing Dashboard</h1>
+    
+    <div class="row mt-4">
+      <!-- Data Quality Score Section -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">Overall Data Quality Score</div>
+          <div class="card-body text-center">
+            <div id="quality-score" class="quality-indicator high-quality">
+              92%
+            </div>
+            <p class="mt-3">This score indicates the overall quality of uploaded healthcare data.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Data Quality Trends Graph -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">Data Quality Trends</div>
+          <div class="card-body">
+            <canvas id="qualityTrendsChart" width="400" height="200"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row mt-4">
+      <!-- Data Upload Section -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">Upload Healthcare Data</div>
+          <div class="card-body">
+            <form id="upload-form">
+              <div class="mb-3">
+                <label for="fileUpload" class="form-label">Select CSV File</label>
+                <input type="file" class="form-control" id="fileUpload" accept=".csv">
+              </div>
+              <div class="mb-3">
+                <label for="datasetName" class="form-label">Dataset Name</label>
+                <input type="text" class="form-control" id="datasetName" placeholder="Enter dataset name">
+              </div>
+              <button type="submit" class="btn btn-primary">Upload & Analyze</button>
+            </form>
+            <div class="mt-3" id="upload-status"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Issues Summary Section -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">Data Issues Summary</div>
+          <div class="card-body">
+            <canvas id="issuesChart" width="400" height="200"></canvas>
+            <div class="mt-3">
+              <h5>Common Issues</h5>
+              <ul id="issues-list" class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Missing values in patient demographics
+                  <span class="badge bg-primary rounded-pill">342</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Inconsistent date formats
+                  <span class="badge bg-primary rounded-pill">217</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Duplicate patient records
+                  <span class="badge bg-primary rounded-pill">89</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Incorrect ICD-10 codes
+                  <span class="badge bg-primary rounded-pill">56</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row mt-4">
+      <!-- Recent Cleansing Operations Table -->
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">Recent Cleansing Operations</div>
+          <div class="card-body">
+            <table class="table table-striped" id="operations-table">
+              <thead>
+                <tr>
+                  <th>Operation ID</th>
+                  <th>Dataset</th>
+                  <th>Timestamp</th>
+                  <th>Records Processed</th>
+                  <th>Issues Detected</th>
+                  <th>Issues Resolved</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>OP-20250218-001</td>
+                  <td>PatientRecords_Feb2025.csv</td>
+                  <td>2025-02-18 09:15:23</td>
+                  <td>15,432</td>
+                  <td>347</td>
+                  <td>342</td>
+                  <td><span class="badge bg-success">Completed</span></td>
+                  <td><button class="btn btn-sm btn-outline-primary">View Details</button></td>
+                </tr>
+                <tr>
+                  <td>OP-20250217-003</td>
+                  <td>LabResults_Q1_2025.csv</td>
+                  <td>2025-02-17 14:22:08</td>
+                  <td>9,871</td>
+                  <td>183</td>
+                  <td>179</td>
+                  <td><span class="badge bg-success">Completed</span></td>
+                  <td><button class="btn btn-sm btn-outline-primary">View Details</button></td>
+                </tr>
+                <tr>
+                  <td>OP-20250217-002</td>
+                  <td>ClaimsData_Jan2025.csv</td>
+                  <td>2025-02-17 11:07:45</td>
+                  <td>22,654</td>
+                  <td>563</td>
+                  <td>512</td>
+                  <td><span class="badge bg-success">Completed</span></td>
+                  <td><button class="btn btn-sm btn-outline-primary">View Details</button></td>
+                </tr>
+                <tr>
+                  <td>OP-20250217-001</td>
+                  <td>ClinicalNotes_Feb2025.csv</td>
+                  <td>2025-02-17 08:30:19</td>
+                  <td>5,128</td>
+                  <td>278</td>
+                  <td>265</td>
+                  <td><span class="badge bg-success">Completed</span></td>
+                  <td><button class="btn btn-sm btn-outline-primary">View Details</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- JS Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    // Initialize quality trends chart
+    function initQualityTrendsChart() {
+      const ctx = document.getElementById('qualityTrendsChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          datasets: [{
+            label: 'Data Quality Score (%)',
+            data: [82, 84, 86, 87, 88, 90, 91, 92, 92, 93, 93, 92],
+            borderColor: '#0d6efd',
+            backgroundColor: 'rgba(13, 110, 253, 0.1)',
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: false,
+              min: 80,
+              max: 100
+            }
+          }
+        }
+      });
+    }
+    
+    // Initialize issues chart
+    function initIssuesChart() {
+      const ctx = document.getElementById('issuesChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Missing Values', 'Format Inconsistencies', 'Duplicates', 'Incorrect Codes', 'Other'],
+          datasets: [{
+            data: [342, 217, 89, 56, 35],
+            backgroundColor: ['#0d6efd', '#6c757d', '#ffc107', '#dc3545', '#20c997']
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+    }
+    
+    // Handle file upload
+    document.getElementById('upload-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const fileInput = document.getElementById('fileUpload');
+      const datasetName = document.getElementById('datasetName').value;
+      const statusDiv = document.getElementById('upload-status');
+      
+      if (fileInput.files.length > 0 && datasetName) {
+        // Simulate file upload and processing
+        statusDiv.innerHTML = '<div class="alert alert-info">Uploading and analyzing data...</div>';
+        
+        setTimeout(() => {
+          statusDiv.innerHTML = '<div class="alert alert-success">File uploaded and analyzed successfully! Quality score: 92%</div>';
+          
+          // Add new operation to table
+          const tbody = document.querySelector('#operations-table tbody');
+          const newRow = `
+            <tr>
+              <td>OP-${new Date().toISOString().slice(0,10).replace(/-/g, '')}-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}</td>
+              <td>${datasetName}</td>
+              <td>${new Date().toLocaleString()}</td>
+              <td>${Math.floor(Math.random() * 20000) + 5000}</td>
+              <td>${Math.floor(Math.random() * 400) + 100}</td>
+              <td>${Math.floor(Math.random() * 390) + 90}</td>
+              <td><span class="badge bg-success">Completed</span></td>
+              <td><button class="btn btn-sm btn-outline-primary">View Details</button></td>
+            </tr>
+          `;
+          tbody.insertAdjacentHTML('afterbegin', newRow);
+        }, 2000);
+      } else {
+        statusDiv.innerHTML = '<div class="alert alert-danger">Please select a file and enter a dataset name</div>';
+      }
+    });
+    
+    // Initialize dashboard
+    function initDashboard() {
+      initQualityTrendsChart();
+      initIssuesChart();
+    }
+    
+    // Start dashboard on page load
+    document.addEventListener('DOMContentLoaded', initDashboard);
+  </script>
+</body>
+</html>
