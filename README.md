@@ -20,8 +20,3 @@ The *Healthcare Data Cleansing Dashboard* is an interactive web-based tool desig
 - *Backend*: JavaScript (Chart.js for visualization)
 - *Data Processing*: CSV handling & NLP-based cleansing techniques
 
-## 📌 How to Run  
-### 1️⃣ Clone the Repository  
-```bash
-git clone https://github.com/yourusername/Healthcare-Data-Cleansing.git
-cd Healthcare-Data-Cleansing
