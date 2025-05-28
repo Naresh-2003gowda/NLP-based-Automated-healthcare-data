@@ -19,4 +19,10 @@ The *Healthcare Data Cleansing Dashboard* is an interactive web-based tool desig
 - *Frontend*: HTML, CSS, Bootstrap
 - *Backend*: JavaScript (Chart.js for visualization)
 - *Data Processing*: CSV handling & NLP-based cleansing techniques
+- 
+## Contributors
 
+- Naresh N (1BC21EC004)
+- Sharath Kumar A (1BC21IS011)
+- S Sai Harshavardhana (1BC21EC005)
+- Tejas M S (1BC21EC008)
